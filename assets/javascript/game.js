@@ -13,19 +13,15 @@ console.log("Random Word: " + randomWord);
 
 var attempts = 10;
 var wins = 0;
-
-
-//to store guessed letters//
 var lettersGuessed = [];
+var secretWord = [];
 
-
-
-for (var i = 0; i < wordList.length; i++) {
-    const element = wordList[i];
-    
+//spaces for secret word letters//
+for (var i = 0; i < randomWord.length; i++) {
+    secretWord.push("_");   
 }
  
 
 document.onkeyup = function(event) {
-    var letterGuess = event.key;
+    var lettersGuessed = event.key;
 }
