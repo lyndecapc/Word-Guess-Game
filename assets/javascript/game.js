@@ -53,39 +53,40 @@ var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
 //check to make sure random word works
 console.log("Secret Word: " + randomWord);
 
-var directionsText = document.getElementById("directions-text");
-var secretWordText = document.getElementById("secretword-text");
-var remainingguessesText = document.getElementById("remainingguesses-text");
-var lettersGuessedText = document.getElementById("lettersguessed-text");
-var winsText = document.getElementById("wins-text");
+var directionsText = document.getElementById("directions");
+var displayText = document.getElementById("display");
+var attemptsText = document.getElementById("attempts");
+var guessesText = document.getElementById("guesses");
+var winsText = document.getElementById("wins");
 
-var remainingGuesses = 10;
+var attempts = 10;
 var wins = 0;
-var lettersGuessed = [];
+var guesses = [];
 var secretWord = [];
-var gameWord = [];
+var computerWord = [];
 
 secretWord = [];
-gameWord = [];
+computerWord = [];
 
 //spaces for secret word letters//
 
 for (var i = 0; i < randomWord.length; i++) {
   secretWord[i] = "-";
 }
-secretWordText.textContent = secretWord.join("");
+displayText.textContent = secretWord.join("");
 
 for (var i = 0; i < randomWord.length; i++) {
   secretWord[i] = randomWord[i];
 }
 
 document.onkeyup = function(event) {
-    lettersGuessed = event.key.toUpperCase();
+    var letter = event.key.toLowerCase();
   };
 
+
 //number of guesses player has//
-remainingGuesses = 10;
-remainingguessesText.textContent = remainingGuesses;
+attempts = 10;
+attemptsText.textContent = attempts;
 
 
 
@@ -93,7 +94,7 @@ remainingguessesText.textContent = remainingGuesses;
 if (
   letters.indexOf(lettersGuessed) > -1 &&
   lettersGuessed.indexOf(lettersGuessed) < 0
-) {
+) { 
   if (secretWord.indexOf(lettersGuessed) > -1) {
     for (var i = 0; i < secretWord.length; i++) {
       if (lettersGuessed == secretWord[i]) {
@@ -104,28 +105,27 @@ if (
   }
 }
 
-lettersGuessed += letters;
-lettersGuessedText.textContent = lettersGuessed;
+guesses += letters;
+guessesText.textContent = guesses;
 
 //    else {
 
 // updating the guessed letters
-lettersGuessed += letters;
-lettersGuessedText.textContent = lettersGuessed;
+guesses += letters;
+guessesText.textContent = guesses;
 
 // conditions for a win
-if (checkArrays(secretWord, randomWord)) {
-  numWins += 1;
-  winsText.textContent = numWins;
+if (checkArrays(secretWord, computerWord)) {
+  wins += 1;
+  winsText.textContent = wins;
 }
 // conditions for a loss
-if (remainingGuesses === 0) {
+if (attempts === 0) {
   resetGame();
 }
 
 // lose an attempt for an incorrect guess//
-remainingGuesses -= 1;
-remainingguessesText.textContent = remainingGuesses;
+attempts -= 1;
+attemptsText.textContent = attempts;
 
-lettersGuessed = [];
-lettersGuessedText.textContent = lettersGuessed;
+
