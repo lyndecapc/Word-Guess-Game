@@ -1,162 +1,130 @@
-//possible words for hangman game//
+//GLOBAL VARIABLES//================================================================
+//array of possible words for hangman game (all lowercase)//
 var wordList = [
-  "SHELDON",
-  "LEONARD",
-  "RAJ",
-  "HOWARD",
-  "PENNY",
-  "BERNADETTE",
-  "PHYSICS",
-  "THEORETICAL",
-  "BAZINGA",
-  "TRAINS",
-  "COMICS",
-  "SPOCK",
-  "BRISKET",
-  "NERDS",
-  "EIDETIC"
+  "sheldon",
+  "leonard",
+  "raj",
+  "howard",
+  "penny",
+  "bernadette",
+  "physics",
+  "theoretical",
+  "bazinga",
+  "trains",
+  "comics",
+  "spock",
+  "brisket",
+  "nerds",
+  "eidetic"
 ];
 
-//letters for player to choose//
-var choices = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z"
-];
+//THE WORD to be guessed will be held here
+var secretWord = "";
 
-//randomly chooses word for player to guess//
-var randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+//breaks solution into letters to be stored in array
+var lettersInSecretWord = [];
 
-//check to make sure random word works
-console.log("Secret Word: " + randomWord);
+//the number of blanks we show based on secret word
+var numBlanks = 0;
 
-var wins = 0;
-var attempts = 10;
+//holds both blank spaces and solved letters 
+var spacesAndSolved = [];
 
-// this array will store the letters already guessed
-var guesses = [];
+//holds all wrong guesses
+var wrongGuesses = [];
 
-// this array will store the secret word
-var secretWord = [];
+//game counters
+var winCounter = 0;
+var lossCounter = 0;
+var numAttempts = 8;
 
-// this array will hold the computer word to check for a win
-var computerWord = [];
+//FUNCTIONS===========================================================
+//start and reset game 
+function startGame() {
 
-// this function will reset the game after a win or loss
-function resetGame() {
-  console.log("------------------------------------------------");
+  //reset guesses back to zero
+  numAttempts = 8;
 
-  attempts = 10;
-  attemptsText.textContent = attempts;
+  //randomly chooses word for player to guess
+  secretWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-  guesses = [];
-  guessesText.textContent = guesses;
+  //breaks secret word into individual letters
+  lettersInSecretWord = secretWord.split("");
+  //number of letters in secret word
+  numBlanks = lettersInSecretWord.length;
 
-  // picking a new word from the array
-  randomWord = wordList[Math.floor(Math.random() * wordList.length)];
-  console.log("Secret Word: " + randomWord);
+  //TESTING: check to make sure secret word in chosen 
+  console.log("Secret Word:" + secretWord);
 
-  // resetting arrays for comparison
-  secretWord = [];
-  computerWord = [];
+  //reset arrays after each round
+  spacesAndSolved = [];
+  wrongGuesses = [];
 
-  for (var i = 0; i < randomWord.length; i++) {
-    secretWord.push("-");
-  }
-  display.textContent = secretWord.join("");
+  //spaces for secret word based on number of letters in solution
 
-  for (var i = 0; i < randomWord.length; i++) {
-    computerWord.push(randomWord[i]);
+  for (var i = 0; i < numBlanks; i++) {
+    spacesAndSolved.push("_");
   }
 
-  return attempts, guesses, randomWord, secretWord, computerWord;
+  //resets number of guesses
+  document.getElementById("guesses-left").innerHTML = numAttempts;
+
+  //displays number of blanks when each round begins
+  document.getElementById("display").innerHTML = spacesAndSolved.join("_");
+
+  //Clears worng guess after each round
+  document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
 }
 
-// function to check if hiddenWord and computerWord are identical
-function checkArrays(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-  for (var i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
+  //check if the letters gussed match letters in the secret word
+  function checkLetters(letter) {
+    var letterInWord = false;
+
+    for (var i = 0; i < numBlanks; i++) {
+      if (secretWord[i] === letter) {
+        letterInWord = true;
+      }
     }
-  }
-  return true;
-}
-
-// assigning variables to the HTML elements we're changing
-var winsText = document.getElementById("wins");
-var displayText = document.getElementById("display");
-var attemptsText = document.getElementById("attempts");
-var guessesText = document.getElementById("guesses");
-
-for (var i = 0; i < randomWord.length; i++) {
-  secretWord[i] = "-";
-}
-display.textContent = secretWord.join("");
-
-for (var i = 0; i < randomWord.length; i++) {
-  computerWord[i] = randomWord[i];
-}
-
-document.onkeyup = function(event) {
-  var letter = event.key.toLowerCase();
-
-  // checking that the input is a letter and has not already been guessed
-  if (choices.indexOf(letter) > -1 && guesses.indexOf(letter) < 0) {
-    // checking if the input is in the computer's word
-    if (computerWord.indexOf(letter) > -1) {
-      // replacing the "-" in the hidden word with the correct letter
-      for (var i = 0; i < computerWord.length; i++) {
-        if (letter == computerWord[i]) {
-          secretWord[i] = letter;
-          display.textContent = secretWord.join("");
+    if (letterInWord) {
+      for (var j = 0; j < numBlanks; j++) {
+        if (secretWord[j] === letter) {
+          spacesAndSolved[j] = letter;
         }
       }
-
-      // updating the guessed letters
-      guesses += letter;
-      guessesText.textContent = guesses;
-
     } else {
-      // lose an attempt for an incorrect guess
-      attempts -= 1;
-      attemptsText.textContent = attempts;
-    }
-
-    // conditions for a win
-    if (checkArrays(secretWord, computerWord)) {
-      wins += 1;
-      winsText.textContent = wins;
-      resetGame();
-    }
-    // conditions for a loss
-    if (attempts === 0) {
-      resetGame();
+      wrongGuesses.push(letter);
+      numAttempts--;
     }
   }
-};
+
+  function roundComplete(){
+ document.getElementById("guesses-left").innerHTML = numAttempts;
+ document.getElementById("display").innerHTML = spacesAndSolved.join(" ");
+ document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join("_");
+
+ if (LettersInSecretWord.toString() === spacesAndSolved.toString())
+ {
+   winCounter++;
+   alert("You Win!");
+
+   document.getElementById("win-counter").innerHTML = winCounter;
+   startGame();
+ }
+
+ else if (numGuesses === 0) {
+   lossCounter++;
+   alert("You Lose!");
+
+   document.getElementById("loss-counter").innerHTML = lossCounter;
+   startGame();
+ }
+  }
+  //MAIN GAME PROCESS ============================================================
+  startGame();
+  document.onkeyup = function (event) {
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
+      var letterGuessed = event.key.toLowerCase();
+      checkLetters(lettersGuessed);
+      roundComplete();
+    }
+  };

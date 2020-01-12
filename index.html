@@ -6,49 +6,60 @@
     <title>Big Bang Theory Word Guess</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Bootstrap Link-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 
 <body>
 
-    <h1>The Big Bang Theory Word Guess Game</h1>
-
     <div class="container">
-
-        <p>Press any letter to start playing!</p>
-
-        <br>
-
-        <div> Secret Word:
-            <div id="display"> </div>
-        </div>
-        
-        <br>
-
-        <div> Attempts:
-            <div id="attempts">
-
+        <div class="jumbotron">
+            <div class="container">
+                <h1>The Big Bang Theory Word Guess</h1>
+                <h4>Guess the words commonly heard on the hit TV show The Big Bang Theory</h4>
+                <smallest>Click any letter to begin...</smallest>
             </div>
         </div>
-        
-        <br>
 
-        <div>Letters Guessed:
-        </div id="guesses">
+
+        <div class="updates">
+            <div> Secret Word:
+                <div id="display"> </div>
+            </div>
+
+            <br>
+
+            <div> Guesses Left:
+                <div id="guesses-left">
+
+                </div>
+            </div>
+
+            <br>
+
+            <div>Letters Guessed:
+                <span id="wrong-guesses"></span>
+            </div>
+
+            <br>
+
+            <div> Wins:
+                <span id="win-counter"> </span>
+            </div>
+
+
+            <div> Losses:
+                <span id="loss-counter"> </span>
+            </div>
+        </div>
     </div>
-    
-    <br>
-
-    <div> Wins:
-    </div id="wins"> 
     </div>
 
-    </div>
-
-
-    <script src="assets/javascript/game2.js"></script>
+    <script src="assets/javascript/game3.js"></script>
 
 </body>
 
